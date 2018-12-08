@@ -1,12 +1,13 @@
 package main
 
 import (
+	"flag"
+	"github.com/gotk3/gotk3/gdk"
+	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 	"log"
-	"mineclock/clockstyle"
-	"flag"
+	"mineclock-go/clockstyle"
 	"time"
-	"github.com/gotk3/gotk3/glib"
 )
 
 var clock *gtk.Label
@@ -55,6 +56,9 @@ func main() {
 	win.Fullscreen()
 	win.ShowAll()
 
+	//Add a key listener to exit
+	win.Connect("key-press-event", keypress)
+
 	//First run
 	getTime()
 
@@ -73,4 +77,12 @@ func getTime() bool {
 
 	//true to keep the timer happy.
 	return true
+}
+
+func keypress(w *gtk.Window, e *gdk.Event) {
+	keyEvent := gdk.EventKey{e}
+
+	if keyEvent.KeyVal() == 113 {
+		gtk.MainQuit()
+	}
 }
